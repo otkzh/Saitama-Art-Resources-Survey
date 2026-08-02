@@ -63,7 +63,6 @@ flowchart LR
 - `index.html`：静的ホスティング用の入口。`map.html`を開く
 - `map.html`：データを埋め込んだPure HTML + JavaScript版ビューア。直接開いて利用可能
 - `vendor/leaflet/`：静的版へ同梱したLeaflet.js 1.9.4
-- `site/`：React版ビューア（任意。静的版の実行には不要）
 - `data/arts_council_saitama_art_resources_official_gsi_pending.csv`：施設、国土地理院座標、場所分類を含む作業用CSV
 - `data/open_data/111007_public_facility.csv`：公開用候補CSV。OSM照合列を含む
 - `data/copyrighted/arts_council_saitama_articles.csv`：記事・画像メタデータ。オープンデータ対象外
@@ -90,7 +89,7 @@ python3 scripts/download_article_images.py
 python3 scripts/build_static_map.py
 ```
 
-再取得後は、場所分類、公開用CSV、記事CSV、`site/public/data/` の複製を更新し、差分と権利条件を確認してください。記事・画像の取得と公開は、権利者の利用条件および必要な許諾の範囲内で行ってください。
+再取得後は、場所分類、公開用CSV、記事CSVを更新し、差分と権利条件を確認してください。記事・画像の取得と公開は、権利者の利用条件および必要な許諾の範囲内で行ってください。
 
 ## 静的版の表示
 
@@ -98,7 +97,7 @@ python3 scripts/build_static_map.py
 
 記事画像は `data/copyrighted/images/` のWebPを相対パスで表示します。このため、`map.html`、`data/`、`vendor/` の位置関係を維持してください。OpenStreetMapの背景地図タイル表示にはインターネット接続が必要です。
 
-CSVを更新した場合は `python3 scripts/build_static_map.py` を再実行してください。React版を使う場合のみ、`site/` で `npm run dev` を実行します。
+CSVを更新した場合は `python3 scripts/build_static_map.py` を再実行してください。
 
 ## 現在の収録状況
 
