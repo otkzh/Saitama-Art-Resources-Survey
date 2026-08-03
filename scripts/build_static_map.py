@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Embed the map CSV datasets into map.html for direct file:// use."""
+"""Embed the map CSV datasets into index.html for direct file:// use."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-MAP_HTML = REPOSITORY_ROOT / "map.html"
+MAP_HTML = REPOSITORY_ROOT / "index.html"
 DATASETS = {
     "facility": REPOSITORY_ROOT / "data" / "arts_council_saitama_art_resources_official_gsi_pending.csv",
     "article": REPOSITORY_ROOT / "data" / "copyrighted" / "arts_council_saitama_articles.csv",
@@ -58,7 +58,7 @@ def main() -> None:
     )
     updated, count = pattern.subn(replacement, html)
     if count != 1:
-        raise RuntimeError("map.html static data markers were not found exactly once")
+        raise RuntimeError("index.html static data markers were not found exactly once")
     write_atomic(MAP_HTML, updated)
     sizes = {name: path.stat().st_size for name, path in DATASETS.items()}
     print(f"Embedded {sum(sizes.values())} bytes from {len(sizes)} CSV files into {MAP_HTML}")

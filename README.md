@@ -43,6 +43,12 @@
 
 OSM由来データを公開・再利用する際は、[OpenStreetMapの著作権とライセンス](https://www.openstreetmap.org/copyright)に従い、`© OpenStreetMap contributors` の表示とODbLへのリンクを維持してください。
 
+### 現在地から徒歩ルートを表示する
+
+画面上部の「現在地を取得」ボタンでは、ブラウザのGeolocation APIで取得した位置と精度範囲を地図へ表示します。各施設の詳細画面冒頭にある「徒歩ルートを表示」ボタンでは、現在地から施設までの経路、距離、所要時間の目安を地図内へ表示します。
+
+ルート表示には [Leaflet Routing Machine 3.2.12](https://www.liedman.net/leaflet-routing-machine/) を選定し、配布ファイルを `vendor/leaflet-routing-machine/` へ同梱しています。経路計算はFOSSGISが公開する徒歩用OSRMサービスを利用し、OpenStreetMapの道路データを基に計算します。距離・時間・通行可否は目安であり、現地の状況や交通規制を優先してください。公開サービスはフェアユースを前提とするため、大量アクセスを伴う運用では専用のルーティング基盤へ切り替えてください。
+
 ## データの流れ
 
 ```mermaid
@@ -60,9 +66,9 @@ flowchart LR
 
 ## 主なファイル
 
-- `index.html`：静的ホスティング用の入口。`map.html`を開く
-- `map.html`：データを埋め込んだPure HTML + JavaScript版ビューア。直接開いて利用可能
+- `index.html`：データを埋め込んだPure HTML + JavaScript版ビューア。静的ホスティングの入口であり、直接開いても利用可能
 - `vendor/leaflet/`：静的版へ同梱したLeaflet.js 1.9.4
+- `vendor/leaflet-routing-machine/`：徒歩ルート表示用に同梱したLeaflet Routing Machine 3.2.12
 - `data/arts_council_saitama_art_resources_official_gsi_pending.csv`：施設、国土地理院座標、場所分類を含む作業用CSV
 - `data/open_data/111007_public_facility.csv`：公開用候補CSV。OSM照合列を含む
 - `data/copyrighted/arts_council_saitama_articles.csv`：記事・画像メタデータ。オープンデータ対象外
@@ -85,7 +91,7 @@ python3 scripts/scrape_artscouncil_articles.py
 # 4. 記事画像をダウンロードし、長辺1280px・品質78のWebPへ変換
 python3 scripts/download_article_images.py
 
-# 5. 3つのCSVをmap.htmlへ埋め込み、静的版を再生成
+# 5. 3つのCSVをindex.htmlへ埋め込み、静的版を再生成
 python3 scripts/build_static_map.py
 ```
 
@@ -93,9 +99,11 @@ python3 scripts/build_static_map.py
 
 ## 静的版の表示
 
-`index.html` または `map.html` をダブルクリックするか、ブラウザへドラッグすると `file://` のまま表示できます。施設CSV、記事CSV、OSM照合CSVはBase64としてHTML内に埋め込まれ、Leaflet.js本体も `vendor/leaflet/` から読み込むため、React、Node.js、ビルド環境、ローカルHTTPサーバーは不要です。
+`index.html` をダブルクリックするか、ブラウザへドラッグすると `file://` のまま表示できます。施設CSV、記事CSV、OSM照合CSVはBase64としてHTML内に埋め込まれ、Leaflet.jsとLeaflet Routing Machine本体も `vendor/` から読み込むため、React、Node.js、ビルド環境、ローカルHTTPサーバーは不要です。
 
-記事画像は `data/copyrighted/images/` のWebPを相対パスで表示します。このため、`map.html`、`data/`、`vendor/` の位置関係を維持してください。OpenStreetMapの背景地図タイル表示にはインターネット接続が必要です。
+記事画像は `data/copyrighted/images/` のWebPを相対パスで表示します。このため、`index.html`、`data/`、`vendor/` の位置関係を維持してください。OpenStreetMapの背景地図タイルと徒歩ルートの取得にはインターネット接続が必要です。
+
+現在地の取得にはブラウザ上で位置情報の利用許可が必要です。ブラウザによっては `file://` で位置情報を利用できないため、その場合はHTTPSの静的ホスティング、または `http://localhost` から開いてください。位置情報はブラウザ内でルート検索に使用し、このリポジトリのCSVへ保存しません。
 
 CSVを更新した場合は `python3 scripts/build_static_map.py` を再実行してください。
 
