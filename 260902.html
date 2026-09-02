@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="さいたま市のアート資源を場所の性格や年度から探せる地図ビューア" />
-    <title>さいたまアート資源マップ</title>
+    <meta name="description" content="さいたま市のアート資源を、現在地・住所・区・カテゴリ・タグから探せる地図ビューア" />
+    <title>さいたまアート資源マップ｜近くから探す</title>
     <link rel="stylesheet" href="./vendor/leaflet/leaflet.css" />
     <link rel="stylesheet" href="./vendor/leaflet-routing-machine/leaflet-routing-machine.css" />
     <style>
@@ -209,18 +209,23 @@
   </head>
   <body>
     <main class="app">
-      <header><div><span class="eyebrow">SAITAMA ART RESOURCE MAP</span><h1>さいたまアート資源マップ</h1></div><p>さいたま市のアート資源を、場所の性格・年度・キーワードから探し、活動の背景や写真まで読めるアーカイブ・ビューアです。</p></header>
-      <section class="controls" aria-label="地図の絞り込み">
-        <label><span>施設・記事を検索</span><span class="search"><b aria-hidden="true">⌕</b><input id="search" type="search" placeholder="施設名・住所・記事本文" /></span></label>
-        <fieldset class="year-filter"><legend>年度（初期表示：全年度）</legend><div id="years" class="years"></div></fieldset>
-        <div class="map-actions"><button id="coordinate" type="button" aria-pressed="false">⌖ 国土地理院座標</button><button id="locate" type="button" aria-live="polite"><span aria-hidden="true">◎</span><span class="locate-label">現在地を取得</span></button></div>
-        <button id="mobile-filter-toggle" class="mobile-filter-toggle" type="button" aria-expanded="false" aria-controls="years categories"><span><b>絞り込み</b><small id="mobile-filter-state">年度・場所の性格</small></span><span class="toggle-mark" aria-hidden="true">＋</span></button>
-        <div class="count" aria-live="polite"><strong id="count">—</strong><span class="count-desktop">施設を表示</span><span class="count-mobile">件</span></div>
+      <header><div><span class="eyebrow">SAITAMA ART RESOURCE MAP</span><h1>さいたまアート資源マップ</h1></div><p>現在地や住所、区、興味のあることから、さいたまの文化的な場所と活動を見つけられる地図です。</p></header>
+      <section class="controls" aria-label="スポット検索">
+        <label><span>キーワードから探す</span><span class="search"><b aria-hidden="true">⌕</b><input id="search" type="search" placeholder="施設名・タグ・記事・住所" autocomplete="off" /></span></label>
+        <form id="near-search" class="near-search"><span>住所から近くを探す</span><span class="near-row"><input id="near-address" type="search" placeholder="例：さいたま市浦和区常盤" autocomplete="street-address" aria-describedby="near-message" /><button id="near-submit" type="submit">近くを探す</button></span><p id="near-message" class="near-message" aria-live="polite">住所は保存せず、検索時のみ国土地理院APIへ送信します。 <button id="near-clear" type="button">解除</button></p></form>
+        <div class="map-actions"><button id="coordinate" type="button" aria-pressed="false">⌖ 座標を確認</button><button id="locate" type="button" aria-live="polite"><span aria-hidden="true">◎</span><span class="locate-label">現在地で探す</span></button></div>
+        <button id="mobile-filter-toggle" class="mobile-filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel"><span><b>絞り込み</b><small id="mobile-filter-state">区・カテゴリ・タグ</small></span><span class="toggle-mark" aria-hidden="true">＋</span></button>
+        <div class="count" aria-live="polite"><strong id="count">—</strong><span class="count-desktop">スポット</span><span class="count-mobile">件</span></div>
       </section>
-      <section class="categories"><span>場所の性格</span><div id="categories" class="category-options"></div></section>
+      <section id="filter-panel" class="filter-panel" aria-label="検索条件">
+        <div class="filter-group"><span>区</span><div id="wards" class="filter-options"></div></div>
+        <div class="filter-group"><span>カテゴリ</span><div id="categories" class="filter-options"></div></div>
+        <div class="filter-group"><span>検索タグ（複数選択可）</span><div id="tags" class="filter-options"></div></div>
+        <div class="filter-group"><span>近くの範囲</span><div id="distances" class="filter-options distance-options disabled"></div></div>
+      </section>
       <section class="workspace">
-        <div class="map-panel"><div id="map" aria-label="さいたま市のアート資源地図"></div><div id="state" class="state" role="status"><span>◎</span><strong>地図と記事を準備しています</strong><p></p></div><div id="map-note" class="map-note">色：場所の性格 / 位置：国土地理院API</div></div>
-        <aside id="viewer" aria-label="施設一覧"><div id="list-view"><div class="list-heading"><div><span class="eyebrow">PLACES & STORIES</span><h2>施設一覧</h2></div><button id="clear" type="button">絞り込みを解除</button></div><div id="list"></div></div><div id="detail" class="detail" hidden></div></aside>
+        <div class="map-panel"><div id="map" aria-label="さいたま市のアート資源地図"></div><div id="state" class="state" role="status"><span>◎</span><strong>地図と記事を準備しています</strong><p></p></div><div id="map-note" class="map-note">色：カテゴリ / 位置：国土地理院API</div></div>
+        <aside id="viewer" aria-label="スポット一覧"><div id="list-view"><div class="list-heading"><div class="result-copy"><span class="eyebrow">PLACES NEAR YOU</span><h2>スポット一覧</h2><p id="result-summary" class="result-summary" aria-live="polite"></p></div><button id="clear" type="button">条件をすべて解除</button></div><div id="list"></div></div><div id="detail" class="detail" hidden></div></aside>
       </section>
       <footer><span>記事・画像 © Saitama City Cultural Promotion Foundation / Arts Council Saitama</span><span>地図・経路・OSM情報 © OpenStreetMap contributors / Routing: OSRM</span></footer>
     </main>
