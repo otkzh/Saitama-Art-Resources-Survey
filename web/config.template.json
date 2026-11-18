@@ -1,0 +1,11 @@
+{
+  "tileUrl": "https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png",
+  "tileAttribution": "地理院タイル",
+  "tileAttributionUrl": "https://maps.gsi.go.jp/development/ichiran.html",
+  "maxZoom": 18,
+  "addressSearch": {
+    "enabled": false,
+    "endpoint": "https://msearch.gsi.go.jp/address-search/AddressSearch",
+    "attribution": "国土地理院 住所検索"
+  }
+}

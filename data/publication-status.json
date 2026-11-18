@@ -1,0 +1,230 @@
+{
+  "note": "2026-11-18の連絡に基づく確認用対象。remaining-in-reviewは許可済みを意味しない。正式公開にはapprovedと許可確認記録が必要。",
+  "spots": [
+    {
+      "id": "1",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "2",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "3",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "4",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "5",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "6",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "7",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "8",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "9",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "10",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "11",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "12",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "13",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "14",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "15",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "16",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "17",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "18",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "19",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "20",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "21",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "22",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "23",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "24",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "25",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "26",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "27",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "28",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "29",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "30",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "31",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "32",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "33",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "34",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "35",
+      "status": "pending-contact",
+      "evidence": ""
+    },
+    {
+      "id": "36",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "37",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "38",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "39",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "40",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "41",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "42",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "43",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "44",
+      "status": "remaining-in-review",
+      "evidence": ""
+    },
+    {
+      "id": "45",
+      "status": "remaining-in-review",
+      "evidence": ""
+    }
+  ]
+}

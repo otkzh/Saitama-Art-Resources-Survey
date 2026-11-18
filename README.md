@@ -4,6 +4,46 @@
 
 このリポジトリでは、公開しやすい施設データと、著作権のある記事・画像を意図的に分離しています。名称は調査範囲を明確にするため、画面・メタデータ・文書で「さいたまアート資源マップ」に統一しています。
 
+## 正式版の開発・ZIP納品
+
+正式版は `web/` の Vue 3 + TypeScript + Vite + Leaflet で開発しています。設置先ではビルド済みの静的ファイルを配信するため、Node.jsやデータベースは不要です。従来の `index.html`、`260902.html` は比較用に保持しています。
+
+開発環境はNode.js 24系（`.node-version`参照）、npm、Python 3（ZIP作成・テスト用配信のみ）です。
+
+```bash
+npm ci
+npm run dev
+npm test
+npm run package:review
+```
+
+`dist/delivery/saitama-art-map-review.zip` が、26件で動作を確認するためのZIPです。未連絡の11件を除外しており、残る対象が許可済みであることを意味しません。公開フォルダへ置くのは、このZIPを展開した内容だけです。
+
+掲載許可は `data/publication-status.json` で管理します。先方の確認記録に基づいて、対象の `status` を `approved`、`evidence` を確認記録の参照へ更新してから正式公開用を生成します。
+
+```bash
+npm run package:release
+```
+
+許可済みかつ確認記録のある対象だけが公開ZIPに入り、対象が0件なら生成は失敗します。`pending-contact`、`denied`、未設定のIDは除外します。画像も生成のたびに掲載対象だけで作り直します。
+
+`dist/delivery/saitama-art-map-source.zip` は保守用で、調査元データ・掲載管理を含みます。公開フォルダへ置かないでください。
+
+- [設置・更新手順](docs/production-install.txt)
+- [正式版の開発記録・検証結果](docs/production-development.md)
+- [技術選定](docs/production-technology-selection.md)
+
+住所検索は候補選択・エラー処理を実装していますが、APIの正式運用条件を確認するまで初期設定は無効です。`web/config.template.json`（納品後は `config.json`）で切り替えます。徒歩経路はGoogle Mapsの経路案内を開きます。
+
+画面の自動テストは、ZIPを展開したサブディレクトリを静的配信して実行します。
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```
+
+以下は従来版のデータと機能についての説明です。正式版の実装・納品手順は上記を参照してください。
+
 ## なぜこの構成にしているか
 
 ### オープンデータと著作物を混ぜない
