@@ -232,8 +232,14 @@ aside {
   min-height: 0;
   flex-direction: column;
 }
+#list-view:not([hidden]) {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+}
 .list-heading {
   display: flex;
+  flex: none;
   min-height: 82px;
   align-items: center;
   justify-content: space-between;
@@ -260,6 +266,7 @@ aside {
   font-size: 0.66rem;
 }
 #list {
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
 }
