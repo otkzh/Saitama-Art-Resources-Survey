@@ -67,6 +67,7 @@ flowchart LR
 ## 主なファイル
 
 - `index.html`：データを埋め込んだPure HTML + JavaScript版ビューア。静的ホスティングの入口であり、直接開いても利用可能
+- `assets/map.css`・`assets/map.js`：トップページのスタイルと地図ビューアの処理
 - `vendor/leaflet/`：静的版へ同梱したLeaflet.js 1.9.4
 - `vendor/leaflet-routing-machine/`：徒歩ルート表示用に同梱したLeaflet Routing Machine 3.2.12
 - `data/arts_council_saitama_art_resources_official_gsi_pending.csv`：施設、国土地理院座標、場所分類を含む作業用CSV
@@ -101,16 +102,17 @@ python3 scripts/build_static_map.py
 
 `index.html` をダブルクリックするか、ブラウザへドラッグすると `file://` のまま表示できます。施設CSV、記事CSV、OSM照合CSVはBase64としてHTML内に埋め込まれ、Leaflet.jsとLeaflet Routing Machine本体も `vendor/` から読み込むため、React、Node.js、ビルド環境、ローカルHTTPサーバーは不要です。
 
-記事画像は `data/copyrighted/images/` のWebPを相対パスで表示します。このため、`index.html`、`data/`、`vendor/` の位置関係を維持してください。OpenStreetMapの背景地図タイルと徒歩ルートの取得にはインターネット接続が必要です。
+記事画像は `data/copyrighted/images/` のWebPを相対パスで表示します。このため、`index.html`、`assets/`、`data/`、`vendor/` の位置関係を維持してください。OpenStreetMapの背景地図タイルと徒歩ルートの取得にはインターネット接続が必要です。
 
 現在地の取得にはブラウザ上で位置情報の利用許可が必要です。ブラウザによっては `file://` で位置情報を利用できないため、その場合はHTTPSの静的ホスティング、または `http://localhost` から開いてください。位置情報はブラウザ内でルート検索に使用し、このリポジトリのCSVへ保存しません。
 
-CSVを更新した場合は `python3 scripts/build_static_map.py` を再実行してください。
+CSVや掲載対象を更新した場合は `python3 scripts/build_static_map.py` を再実行してください。連絡がついていない調査先は `scripts/build_static_map.py` の `PENDING_CONTACT_IDS` で管理します。GitHub Pages では同じスクリプトで公開用ファイルを生成し、該当施設の画像と元の調査データを配信対象から除外します。
 
 ## 現在の収録状況
 
 - 元調査：45件
-- 国土地理院座標を確認し地図表示できる施設：37件
+- 国土地理院座標を確認できる施設：37件
+- 地図の掲載件数：26件（連絡がついていない11件を除外）
 - OSM照合：一致5件、推定一致6件、該当なし26件
 - 記事データ：45件
 - 表示用WebP：143点
