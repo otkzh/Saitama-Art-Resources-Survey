@@ -64,7 +64,7 @@ def write_atomic(path: Path, content: str) -> None:
 
 def stage_pages(output: Path) -> None:
     output.mkdir(parents=True)
-    for name in (MAP_HTML.name, "260902.html", "site.webmanifest"):
+    for name in (MAP_HTML.name, "site.webmanifest"):
         shutil.copy2(REPOSITORY_ROOT / name, output / name)
     for name in ("assets", "vendor"):
         shutil.copytree(REPOSITORY_ROOT / name, output / name)

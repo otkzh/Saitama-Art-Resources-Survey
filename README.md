@@ -106,7 +106,7 @@ python3 scripts/build_static_map.py
 
 現在地の取得にはブラウザ上で位置情報の利用許可が必要です。ブラウザによっては `file://` で位置情報を利用できないため、その場合はHTTPSの静的ホスティング、または `http://localhost` から開いてください。位置情報はブラウザ内でルート検索に使用し、このリポジトリのCSVへ保存しません。
 
-CSVや掲載対象を更新した場合は `python3 scripts/build_static_map.py` を再実行してください。連絡がついていない調査先は `scripts/build_static_map.py` の `PENDING_CONTACT_IDS` で管理します。GitHub Pages では同じスクリプトで公開用ファイルを生成し、該当施設の画像と元の調査データを配信対象から除外します。共有済みの `260902.html` はトップページに転送します。
+CSVや掲載対象を更新した場合は `python3 scripts/build_static_map.py` を再実行してください。連絡がついていない調査先は `scripts/build_static_map.py` の `PENDING_CONTACT_IDS` で管理します。GitHub Pages では同じスクリプトで公開用ファイルを生成し、該当施設の画像と元の調査データを配信対象から除外します。
 
 ## 現在の収録状況
 
