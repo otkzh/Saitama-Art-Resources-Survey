@@ -3,6 +3,7 @@ import {test,expect} from '@playwright/test';
 test.beforeEach(async({page})=>{
   // Core acceptance checks stay independent of external tile availability.
   await page.route('https://cyberjapandata.gsi.go.jp/**',route=>route.abort());
+  await page.route('https://tiles.openfreemap.org/**',route=>route.abort());
   await page.goto('./');
   await expect(page.locator('.spot-card')).toHaveCount(26);
 });

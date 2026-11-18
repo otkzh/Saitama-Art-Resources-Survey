@@ -8,13 +8,38 @@
    assets内のハッシュ付きファイルは長期キャッシュが可能です。
 
 外部通信
-- 背景地図: cyberjapandata.gsi.go.jp（国土地理院）。取得できなくても写真付き一覧は利用できます。
+- 背景地図: tiles.openfreemap.org（OpenFreeMapのスタイル・タイル・文字・スプライト）と
+  cyberjapandata.gsi.go.jp（国土地理院）。取得できなくても写真付き一覧は利用できます。
+  初期表示はOpenFreeMap Positronです。右上から6種類を切り替えられます。
+  WebGL2が利用できない場合や読み込みが失敗した場合は、地理院淡色へ一度だけ切り替えます。
+  localStorageへ保存するのは背景地図のIDだけです。住所・現在地は保存しません。
 - 現在地: ブラウザの位置情報許可が必要です。アプリは位置や住所を永続保存しません。
 - 経路案内: 利用者の操作でGoogle Mapsを開きます。選択したスポットと、取得済みの場合は検索起点の座標を渡します。
 - 住所検索: 初期設定では無効です。運用主体が利用条件・CORS・精度等を確認した後、config.jsonの
   addressSearch.enabledをtrueにすると、候補選択付き住所検索を利用できます。
   入力住所は設定されたAPIへ送信されます。秘密のAPIキーをconfig.jsonへ書かないでください。
 - 設置先にContent-Security-Policyがある場合は、上記とconfig.jsonの外部通信先を許可してください。
+  MapLibreのWorkerはassets内に同梱するためworker-src 'self'とJavaScriptの配信が必要です。
+  画像・スプライトの取り扱いによってはimg-srcにdata:とblob:も必要です。
+  connect-srcにはtiles.openfreemap.orgとcyberjapandata.gsi.go.jpを含めます。
+  既存サイトのCSPを一括して置き換えず、設置先でブロックされる通信とWorkerを確認してください。
+  WebGLの描画に必要なメモリ・性能は端末によって異なります。
+
+背景地図の設定・出典・キャッシュ
+- 6種類のURL・表示名・帰属表示はソースのweb/src/maps/basemaps.tsで一元管理します。
+  従来のconfig.jsonのtileUrl等は使用しません。変更後はZIPを再生成してください。
+- OpenFreeMapは公開Webサイト・商用利用に利用でき、APIキーと登録は不要です。
+  通常の閲覧回数・リクエスト数に上限はありませんが、無保証のサービスです。
+  利用条件: https://openfreemap.org/tos/ / https://openfreemap.org/quick_start/
+- 地理院タイルは出典リンクを表示してウェブ上でリアルタイム利用します。
+  航空写真の低ズームでは衛星画像等になるため、表示ズームに応じた追加出典を表示します。
+  利用条件: https://maps.gsi.go.jp/development/ichiran.html
+  https://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html
+  サーバーの正常運用を妨げる負荷を与える通信は、予告なく遮断される場合があります。
+  https://maps.gsi.go.jp/help/termsofuse.html
+- 地図内の出典表示を隠さないでください。HTTPキャッシュは配信元の指示を利用します。
+  ZIPには背景タイル・スタイル・フォント等のデータは同梱しません。
+  サムネイル用の追加通信、Service Worker、独自のタイル保存、一括取得は行いません。
 
 データと掲載許可
 - review版は正式公開前の確認用です。未連絡11件は含めていませんが、残る対象の許可済みを保証するものではありません。
@@ -30,3 +55,4 @@
 - スマートフォン・拡大表示・キーボード操作で利用できる。
 - 現在地の拒否、地図の通信失敗時にも一覧を利用できる。
 - 正式な設置先のサブディレクトリで画像とJSONが読み込める。
+- 背景地図6種類、選択の保存・再訪時の復元、出典、CSP、WebGL2非対応時の動作を確認する。

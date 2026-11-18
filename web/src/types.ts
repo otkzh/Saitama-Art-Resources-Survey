@@ -24,10 +24,6 @@ export interface Location { lat: number; lon: number; label: string; accuracy?: 
 export interface Filters { query: string; ward: string; category: string; tags: string[]; radius: number; origin: Location | null }
 export interface SearchResult extends Spot { distance: number | null }
 export interface MapConfig {
-  tileUrl: string;
-  tileAttribution: string;
-  tileAttributionUrl: string;
-  maxZoom: number;
   addressSearch: { enabled: boolean; endpoint: string; attribution: string };
 }
 export interface Dataset { mode: 'review' | 'release'; generatedAt: string; spots: Spot[] }

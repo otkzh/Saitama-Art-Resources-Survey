@@ -53,7 +53,7 @@ GitHub Pagesのワークフローも `dist/production` のみを配信する構�
 
 ## 外部通信と設定
 
-背景地図は地理院タイル。`config.json` のURL・出典名・出典リンク・最大ズームで変更できる。設定ファイルの出典はHTMLとして挿入せず、文字列として表示する。
+背景地図はOpenFreeMap 3種類と地理院タイル3種類を切り替える。URL・表示名・出典は `web/src/maps/basemaps.ts` に集約し、従来の `config.json` の背景地図項目は廃止した。初期表示はPositron、選択した背景IDだけをlocalStorageに保存する。詳細は `basemap-switching.md` を参照。
 
 住所検索は `addressSearch.enabled` をtrueにした場合のみ利用。現行アダプターは国土地理院のGeoJSON形式に対応する。入力住所は設定先へ送られるため、運用主体で利用条件・CORS・精度等を確認してから有効にする。入力と位置情報はアプリ側で永続保存しない。
 

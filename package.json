@@ -21,8 +21,10 @@
     "package:release": "npm run build:release && node --import tsx scripts/package-production.ts --release"
   },
   "dependencies": {
-    "vue": "^3.5.0",
-    "leaflet": "1.9.4"
+    "@maplibre/maplibre-gl-leaflet": "^0.1.4",
+    "leaflet": "1.9.4",
+    "maplibre-gl": "^6.19.0",
+    "vue": "^3.5.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.0",

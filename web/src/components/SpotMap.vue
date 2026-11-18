@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import L from 'leaflet';
-import type { SearchResult, Location, MapConfig } from '../types';
-import { CATEGORY_COLORS, safeHttps } from '../domain';
+import BasemapSwitcher from './BasemapSwitcher.vue';
+import type { SearchResult, Location } from '../types';
+import { CATEGORY_COLORS } from '../domain';
+import { BackgroundLayer, type BackgroundState } from '../maps/backgroundLayer';
+import { DEFAULT_BASEMAP, getBasemap, readPreference, savePreference, type Basemap, type BasemapId, type PreferenceStore } from '../maps/basemaps';
 
-const props = defineProps<{ spots:SearchResult[]; selectedId:string; origin:Location|null; config:MapConfig }>();
-const emit = defineEmits<{ select:[id:string] }>();
+const props = defineProps<{ spots:SearchResult[]; selectedId:string; origin:Location|null }>();
+const emit = defineEmits<{ select:[id:string]; basemapChange:[basemap:Basemap] }>();
 const canvas = ref<HTMLElement>();
-const tileFailed = ref(false);
+const backgroundState=ref<BackgroundState>({id:DEFAULT_BASEMAP,status:'loading',message:''});
+const creditHeight=ref(20);
+let background:BackgroundLayer|undefined,storage:PreferenceStore|undefined,creditObserver:ResizeObserver|undefined;
 let map:L.Map|undefined, points:L.LayerGroup, originLayer:L.LayerGroup, resizeObserver:ResizeObserver;
 let markers = new Map<string,L.Marker>();
 function render() {
@@ -39,16 +44,28 @@ function highlight() {
     marker.setZIndexOffset(id===props.selectedId?1000:0);
   });
 }
+function chooseBasemap(id:BasemapId) {
+  savePreference(storage,id);
+  if(id===backgroundState.value.id&&backgroundState.value.status==='ready')return;
+  void background?.select(id);
+}
 onMounted(()=>{
-  map=L.map(canvas.value!,{scrollWheelZoom:true}).setView([35.89,139.65],11);
-  // Attribution is constructed locally instead of accepting arbitrary HTML from config.
-  const attribution=document.createElement('a');attribution.href=safeHttps(props.config.tileAttributionUrl);attribution.textContent=props.config.tileAttribution;attribution.target='_blank';attribution.rel='noopener noreferrer';
-  L.tileLayer(props.config.tileUrl, { maxZoom:props.config.maxZoom,
-    attribution:attribution.outerHTML,
-  }).on('tileerror',()=>{tileFailed.value=true;}).addTo(map);
+  // Common zoom limits prevent a layer's native limits from moving the camera.
+  map=L.map(canvas.value!,{scrollWheelZoom:true,minZoom:2,maxZoom:18}).setView([35.89,139.65],11);
+  try { storage=window.localStorage; } catch { /* Storage can be denied independently of the map. */ }
+  background=new BackgroundLayer(map,state=>{
+    backgroundState.value=state;
+    emit('basemapChange',getBasemap(state.id));
+  });
   points=L.layerGroup().addTo(map); originLayer=L.layerGroup().addTo(map);
   resizeObserver=new ResizeObserver(()=>map?.invalidateSize()); resizeObserver.observe(canvas.value!);
   render();
+  void background.select(readPreference(storage));
+  const credits=map.attributionControl.getContainer();
+  if(credits) {
+    creditObserver=new ResizeObserver(()=>{creditHeight.value=credits.offsetHeight;});
+    creditObserver.observe(credits);
+  }
 });
 watch(()=>[props.spots.map(s=>s.id).join(','),props.origin?.lat,props.origin?.lon,props.origin?.accuracy,props.origin?.label],render);
 watch(()=>props.selectedId,()=>{
@@ -57,12 +74,13 @@ watch(()=>props.selectedId,()=>{
   if(marker&&map) { map.flyTo(marker.getLatLng(),Math.max(map.getZoom(),15),{duration:0.45}); marker.openPopup(); }
   else map?.closePopup();
 });
-onBeforeUnmount(()=>{ resizeObserver?.disconnect(); map?.remove(); });
+onBeforeUnmount(()=>{ resizeObserver?.disconnect();creditObserver?.disconnect();background?.destroy();map?.remove(); });
 </script>
 <template>
-  <section class="map-panel" aria-label="スポット地図">
+  <section class="map-panel" aria-label="スポット地図" :data-basemap-id="backgroundState.id" :data-basemap-status="backgroundState.status" :style="{'--credit-height':`${creditHeight}px`}">
     <div ref="canvas" class="map-canvas" aria-label="さいたま市のスポット位置" />
-    <p v-if="tileFailed" class="map-message" role="status">背景地図を取得できません。スポット一覧は引き続きご利用いただけます。</p>
+    <BasemapSwitcher :model-value="backgroundState.id" :loading="backgroundState.status==='loading'" @update:model-value="chooseBasemap" />
+    <p v-if="backgroundState.message" class="map-message" role="status">{{backgroundState.message}}</p>
     <span class="map-caption">色：カテゴリ<span v-if="origin"> ／ 青：検索起点</span></span>
   </section>
 </template>

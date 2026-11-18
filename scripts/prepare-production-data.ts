@@ -64,8 +64,8 @@ await copyFile(resolve(root,'web/config.template.json'),resolve(publicDir,'confi
 await copyFile(resolve(root,'assets/favicon.svg'),resolve(publicDir,'favicon.svg'));
 await writeFile(resolve(publicDir,'robots.txt'),mode==='review'?'User-agent: *\nDisallow: /\n':'User-agent: *\nAllow: /\n');
 await writeFile(resolve(publicDir,'INSTALL.txt'),await readFile(resolve(root,'docs/production-install.txt'),'utf8'));
-const notices = ['Vue: MIT','Leaflet: BSD-2-Clause','地図: 国土地理院（https://maps.gsi.go.jp/development/ichiran.html）','OSM登録情報: © OpenStreetMap contributors, ODbL（https://www.openstreetmap.org/copyright）','記事・画像: 公益財団法人さいたま市文化振興事業団 / アーツカウンシルさいたま。オープンデータではありません。'];
-for(const [name,path] of [['Vue','node_modules/vue/LICENSE'],['Leaflet','node_modules/leaflet/LICENSE']]) {
+const notices = ['Vue: MIT','Leaflet: BSD-2-Clause','MapLibre GL JS: BSD-3-Clause','@maplibre/maplibre-gl-leaflet: ISC','背景地図: OpenFreeMap（https://openfreemap.org/）, © OpenMapTiles, © OpenStreetMap contributors（https://www.openstreetmap.org/copyright）','地図: 国土地理院（https://maps.gsi.go.jp/development/ichiran.html）','OSM登録情報: © OpenStreetMap contributors, ODbL（https://www.openstreetmap.org/copyright）','記事・画像: 公益財団法人さいたま市文化振興事業団 / アーツカウンシルさいたま。オープンデータではありません。'];
+for(const [name,path] of [['Vue','node_modules/vue/LICENSE'],['Leaflet','node_modules/leaflet/LICENSE'],['MapLibre GL JS','node_modules/maplibre-gl/LICENSE.txt'],['MapLibre GL Leaflet','node_modules/@maplibre/maplibre-gl-leaflet/LICENSE']]) {
   notices.push(`\n--- ${name} ---\n${await readFile(resolve(root,path),'utf8')}`);
 }
 await writeFile(resolve(publicDir,'THIRD_PARTY_NOTICES.txt'),notices.join('\n'));

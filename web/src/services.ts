@@ -10,7 +10,6 @@ export async function loadContent(signal?:AbortSignal):Promise<{dataset:Dataset;
   if(!dataResponse.ok || !configResponse.ok) throw Error('データを取得できませんでした。時間をおいて再度お試しください。');
   const dataset:Dataset=await dataResponse.json(), config:MapConfig=await configResponse.json();
   if(!Array.isArray(dataset.spots) || !['review','release'].includes(dataset.mode)) throw Error('スポットデータの形式を確認してください。');
-  if(!safeHttps(config.tileUrl.replaceAll('{z}','1').replaceAll('{x}','1').replaceAll('{y}','1')) || !safeHttps(config.tileAttributionUrl) || typeof config.tileAttribution!=='string' || !Number.isFinite(config.maxZoom) || config.maxZoom<1 || config.maxZoom>22) throw Error('背景地図の設定を確認してください。');
   if(config.addressSearch?.enabled && !safeHttps(config.addressSearch.endpoint)) throw Error('住所検索の設定を確認してください。');
   return {dataset,config};
 }

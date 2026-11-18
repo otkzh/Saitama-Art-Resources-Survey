@@ -32,6 +32,7 @@ npm run package:release
 - [設置・更新手順](docs/production-install.txt)
 - [正式版の開発記録・検証結果](docs/production-development.md)
 - [技術選定](docs/production-technology-selection.md)
+- [背景地図切り替え・利用条件・検証](docs/basemap-switching.md)
 
 住所検索は候補選択・エラー処理を実装していますが、APIの正式運用条件を確認するまで初期設定は無効です。`web/config.template.json`（納品後は `config.json`）で切り替えます。徒歩経路はGoogle Mapsの経路案内を開きます。
 

@@ -5,8 +5,10 @@ import Icon from './components/AppIcon.vue';
 import { CATEGORY_COLORS, TAG_ORDER, WARDS, emptyFilters, filterSpots, formatDistance, routeUrl, safeHttps } from './domain';
 import { loadContent, localAsset, locate, searchAddress } from './services';
 import type { Dataset, Location, MapConfig } from './types';
+import { DEFAULT_BASEMAP, getBasemap, type Basemap } from './maps/basemaps';
 
 const dataset=ref<Dataset>(), config=ref<MapConfig>(), loadError=ref(''), loading=ref(true);
+const activeBasemap=ref<Basemap>(getBasemap(DEFAULT_BASEMAP));
 const filters=ref(emptyFilters()), selectedId=ref(''), imageIndex=ref(0), filtersOpen=ref(false);
 const address=ref(''), candidates=ref<Location[]>([]), addressBusy=ref(false), addressError=ref('');
 const locating=ref(false), locationMessage=ref(''), toast=ref('');
@@ -138,7 +140,7 @@ onBeforeUnmount(()=>{ cancelLocationOperations(); loadController.abort(); window
         <button class="reset-button" @click="reset">すべて解除</button>
       </div>
       <section class="workspace">
-        <SpotMap :spots="items" :selected-id="selectedId" :origin="filters.origin" :config="config" @select="selectSpot" />
+        <SpotMap :spots="items" :selected-id="selectedId" :origin="filters.origin" @select="selectSpot" @basemap-change="activeBasemap=$event" />
         <aside class="viewer" aria-label="スポット一覧と詳細">
           <div v-show="!selected" class="list-view">
             <div class="list-heading"><div><span class="eyebrow">PLACES & STORIES</span><h2 id="results-title" tabindex="-1">スポット一覧 <span class="result-number" aria-live="polite" aria-atomic="true">{{items.length}}<small>件</small></span></h2><p>{{filters.origin?'検索起点から近い順・直線距離':'地図と写真から、気になる場所へ。'}}</p></div></div>
@@ -175,7 +177,7 @@ onBeforeUnmount(()=>{ cancelLocationOperations(); loadController.abort(); window
       <section class="map-legend" aria-label="地図の凡例"><span v-for="category in categories" :key="category"><i :style="{background:color(category)}"/>{{category}}</span></section>
       <p class="data-note">アーツカウンシルさいたま「アート資源調査」をもとに作成。掲載情報は調査当時のものです。ご訪問前に公式情報をご確認ください。</p>
     </template>
-    <footer class="site-footer"><span>記事・画像 © Arts Council Saitama</span><span>Map: <a :href="config?safeHttps(config.tileAttributionUrl):'https://maps.gsi.go.jp/development/ichiran.html'" target="_blank" rel="noopener noreferrer">{{config?.tileAttribution||'国土地理院'}}</a> / <a href="https://leafletjs.com" target="_blank" rel="noopener noreferrer">Leaflet</a></span></footer>
+    <footer class="site-footer"><span>記事・画像 © Arts Council Saitama</span><span>Map: <a :href="activeBasemap.providerUrl" target="_blank" rel="noopener noreferrer">{{activeBasemap.provider}}</a> / <a href="https://leafletjs.com" target="_blank" rel="noopener noreferrer">Leaflet</a></span></footer>
     <p v-if="toast" class="toast" role="status">{{toast}}<button aria-label="通知を閉じる" @click="toast=''">×</button></p>
   </main>
 </template>
