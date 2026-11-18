@@ -67,6 +67,7 @@ flowchart LR
 ## 主なファイル
 
 - `index.html`：データを埋め込んだPure HTML + JavaScript版ビューア。静的ホスティングの入口であり、直接開いても利用可能
+- `assets/map.css`・`assets/map.js`：トップページのスタイルと地図ビューアの処理
 - `vendor/leaflet/`：静的版へ同梱したLeaflet.js 1.9.4
 - `vendor/leaflet-routing-machine/`：徒歩ルート表示用に同梱したLeaflet Routing Machine 3.2.12
 - `data/arts_council_saitama_art_resources_official_gsi_pending.csv`：施設、国土地理院座標、場所分類を含む作業用CSV
@@ -101,7 +102,7 @@ python3 scripts/build_static_map.py
 
 `index.html` をダブルクリックするか、ブラウザへドラッグすると `file://` のまま表示できます。施設CSV、記事CSV、OSM照合CSVはBase64としてHTML内に埋め込まれ、Leaflet.jsとLeaflet Routing Machine本体も `vendor/` から読み込むため、React、Node.js、ビルド環境、ローカルHTTPサーバーは不要です。
 
-記事画像は `data/copyrighted/images/` のWebPを相対パスで表示します。このため、`index.html`、`data/`、`vendor/` の位置関係を維持してください。OpenStreetMapの背景地図タイルと徒歩ルートの取得にはインターネット接続が必要です。
+記事画像は `data/copyrighted/images/` のWebPを相対パスで表示します。このため、`index.html`、`assets/`、`data/`、`vendor/` の位置関係を維持してください。OpenStreetMapの背景地図タイルと徒歩ルートの取得にはインターネット接続が必要です。
 
 現在地の取得にはブラウザ上で位置情報の利用許可が必要です。ブラウザによっては `file://` で位置情報を利用できないため、その場合はHTTPSの静的ホスティング、または `http://localhost` から開いてください。位置情報はブラウザ内でルート検索に使用し、このリポジトリのCSVへ保存しません。
 
